@@ -172,3 +172,30 @@ SUM(CASE
 END) AS capital_gain_loss
 FROM Stocks
 GROUP BY stock_name
+
+-- 3497. Analyze Subscription Conversion
+SELECT 
+    user_id,
+    ROUND(AVG(
+        CASE WHEN activity_type = 'free_trial' THEN activity_duration
+    END), 2) AS trial_avg_duration,
+    ROUND(AVG(
+        CASE WHEN activity_type = 'paid' THEN activity_duration
+    END), 2) AS paid_avg_duration
+FROM UserActivity
+GROUP BY user_id
+HAVING paid_avg_duration IS NOT NULL
+
+-- 177. Nth Highest Salary
+CREATE FUNCTION getNthHighestSalary(N INT) RETURNS INT
+BEGIN
+DECLARE M INT;
+SET M = N - 1;
+  RETURN (
+      # Write your MySQL query statement below.
+    SELECT DISTINCT salary
+    FROM Employee
+    ORDER BY salary DESC
+    LIMIT 1 OFFSET M
+  );
+END
