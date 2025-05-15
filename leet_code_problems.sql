@@ -66,6 +66,59 @@ SELECT product_name, year, price
 FROM Sales as s
 JOIN Product as p ON s.product_id = p.product_id
 
+--1581. Customer Who Visited but Did Not Make Any Transactions
+SELECT customer_id, COUNT(*) AS count_no_trans
+FROM Visits as v
+LEFT JOIN Transactions as t ON v.visit_id = t.visit_id
+WHERE transaction_id IS NULL
+GROUP BY customer_id
+
+-- 197. Rising Temperature
+WITH TempWithYesterday AS (
+    SELECT id, temperature, recordDate,
+           LAG(temperature, 1) OVER (ORDER BY recordDate) AS lag_1_temp,
+           LAG(recordDate, 1) OVER (ORDER BY recordDate) AS lag_1_date
+    FROM Weather
+)
+SELECT id as Id
+
+-- 1661. Average Time of Process per Machine
+SELECT
+m1 as machine_id,
+ROUND(AVG(end_time - start_time), 3) as processing_time
+FROM (
+    SELECT 
+    machine_id as m1,
+    process_id as p1,
+    timestamp as start_time
+    FROM Activity
+    WHERE activity_type = 'start'
+) as start_times
+INNER JOIN (
+    SELECT 
+    machine_id as m2,
+    process_id as p2,
+    timestamp as end_time
+    FROM Activity
+    WHERE activity_type = 'end'
+) as end_times on (start_times.m1 = end_times.m2 AND start_times.p1 = end_times.p2)
+GROUP BY m1
+
+-- 577. Employee Bonus
+SELECT name, bonus
+FROM Employee as e
+LEFT JOIN Bonus as b ON e.empId = b.empId
+WHERE bonus < 1000 OR bonus IS NULL
+
+--1280. Students and Examinations
+SELECT
+st.student_id,
+st.student_name,
+sub.subject_name,
+Count(e.student_id) as attended_exams
+FROM Students as st
+CROSS JOIN Subjects as sub
+
 -- 1729. Find Followers Count
 SELECT
 user_id,
