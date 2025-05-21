@@ -229,3 +229,13 @@ SELECT (
     ORDER BY salary DESC
     LIMIT 1 OFFSET 1
 ) AS SecondHighestSalary
+
+-- 1070. Product Sales Analysis III
+SELECT fy.product_id, fy.first_year, Sales.quantity, Sales.price
+FROM Sales
+JOIN (
+    SELECT Sales.product_id, MIN(Sales.year) as first_year
+    FROM Sales
+    GROUP BY Sales.product_id
+) as fy
+ON Sales.product_id = fy.product_id AND Sales.year = fy.first_year
