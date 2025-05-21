@@ -239,3 +239,11 @@ JOIN (
     GROUP BY Sales.product_id
 ) as fy
 ON Sales.product_id = fy.product_id AND Sales.year = fy.first_year
+
+-- 180. Consecutive Numbers
+SELECT DISTINCT num as ConsecutiveNums
+FROM (
+    SELECT id, num, LAG(num) OVER (ORDER BY id) as l1, LAG(num, 2) OVER (ORDER BY id) as l2
+    FROM Logs
+) as t1
+WHERE (num=l1 AND l1=l2)
