@@ -192,10 +192,32 @@ BEGIN
 DECLARE M INT;
 SET M = N - 1;
   RETURN (
-      # Write your MySQL query statement below.
     SELECT DISTINCT salary
     FROM Employee
     ORDER BY salary DESC
     LIMIT 1 OFFSET M
   );
 END
+
+-- 1341. Movie Rating
+# Write your MySQL query statement below
+SELECT title as results
+FROM (
+    SELECT title, AVG(MovieRating.rating) AS grade
+    FROM MovieRating
+    LEFT JOIN Movies ON MovieRating.movie_id = Movies.movie_id
+    WHERE MONTH(MovieRating.created_at) = 2 AND YEAR(MovieRating.created_at) = 2020
+    GROUP BY Movies.title
+    ORDER BY grade DESC, Movies.title ASC
+    LIMIT 1
+) AS a
+UNION ALL
+SELECT name as results
+FROM (
+    SELECT Users.name, COUNT(MovieRating.user_id) as count_user_id
+    FROM MovieRating
+    LEFT JOIN Users ON MovieRating.user_id = Users.user_id
+    GROUP BY MovieRating.user_id
+    ORDER BY count_user_id DESC, Users.name ASC
+    LIMIT 1
+) AS b
