@@ -221,3 +221,11 @@ FROM (
     ORDER BY count_user_id DESC, Users.name ASC
     LIMIT 1
 ) AS b
+
+-- 176. Second Highest Salary
+SELECT (
+    SELECT DISTINCT salary
+    FROM Employee
+    ORDER BY salary DESC
+    LIMIT 1 OFFSET 1
+) AS SecondHighestSalary
